@@ -25,7 +25,7 @@ for file in $(ls cleaned_data); do
       zcat cleaned_data/$file | head -n 1 > tmp/header.txt
       zcat cleaned_data/$file | tail -n+2 | LC_ALL=C sort -h -k$id_col | cat tmp/header.txt - | gzip -c \
         > tmp/$file
-      zcat tmp/$file | LC_ALL=C join -1 $id_col -2 1 - snp_freqs/snp_freqs_all.sorted.tsv | LC_ALL=C sort -k${chr_col},${chr_col}nb -k${pos_col},${pos_col}nb | gzip -c > filled_data/$file
+      zcat tmp/$file | LC_ALL=C join -1 $id_col -2 1 - <(zcat snp_freqs/snp_freqs_all.sorted.tsv.gz) | LC_ALL=C sort -k${chr_col},${chr_col}nb -k${pos_col},${pos_col}nb | gzip -c > filled_data/$file
     fi
   else
     echo "ERROR: File does not have necessary columns to use for BETA: $file" 1>&2
